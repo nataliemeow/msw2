@@ -13,3 +13,7 @@ LISP-like language that compiles to Robot is Chill's macro language called Macro
 	(set+ i 1)
 ])
 ```
+
+## Extensions
+
+See [parser/ext/__init__.py](parser/ext/__init__.py)
