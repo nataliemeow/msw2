@@ -21,4 +21,5 @@ The extension may modify the AST, log to the console, etc.; however, the regex t
 
 from ._include import Include
 from ._aliases import Aliases
-__all__ = ['Include', 'Aliases']
+from ._out_json import OutJson
+__all__ = ['Include', 'Aliases', 'OutJson']
