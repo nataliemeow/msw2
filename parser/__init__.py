@@ -21,10 +21,10 @@ class Token:
 type Node = StringNode | QuotedNode | ListNode
 
 class StringNode(str):
-	def __str__(self):
+	def __repr__(self):
 		if _symbol_re.search(self):
 			return f'"{bytes(self, encoding='unicode_escape').decode('utf-8')}"'
-		return self
+		return str(self)
 	
 	def emit(self):
 		return str(self)
@@ -34,7 +34,7 @@ class QuotedNode():
 	quote: str
 	value: Node
 
-	def __str__(self):
+	def __repr__(self):
 		return f'{self.quote}{self.value}'
 	
 	def emit(self):
@@ -48,8 +48,8 @@ class ListNode(UserList):
 	OPEN: str
 	CLOSE: str
 
-	def __str__(self):
-		return f'{self.OPEN}{' '.join(str(child) for child in self)}{self.CLOSE}'
+	def __repr__(self):
+		return f'{self.OPEN}{' '.join(repr(child) for child in self)}{self.CLOSE}'
 	
 	def emit(self) -> str: ...
 
