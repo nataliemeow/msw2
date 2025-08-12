@@ -5,6 +5,8 @@ import os.path
 # TODO: detect circular includes, add limit
 
 def Include(base: type[Parser]):
+	'''Replace `(#include FILE)` with the contents of FILE.'''
+
 	class _Include(base):
 		path: str | None
 
