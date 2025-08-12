@@ -1,0 +1,60 @@
+from parser import Parser, StringNode, CallListNode
+from typing import cast
+import os.path
+
+# TODO: modularize this further?
+
+_assign_ops = {
+	'+': 'add',
+	'-': 'subtract',
+	'*': 'multiply',
+	'/': 'divide',
+	'%': 'mod',
+	'**': 'pow',
+	'&&': 'and',
+	'||': 'or'
+}
+
+def Aliases(base: type[Parser]):
+	class _Aliases(base):
+		path: str | None
+
+		def __init__(self, *args, path=None, **kwargs):
+			super().__init__(*args, **kwargs)
+			self.path = os.path.abspath('.') if path is None else path
+			self.parent = None
+
+		def _parse_list(self, *args):
+			lst = super()._parse_list(*args)
+
+			base = lst[0]
+			if not isinstance(base, StringNode): return lst
+			
+			new = base
+			match base:
+				case 'set': new = 'store'
+				case 'get': new = 'load'
+				case 'get_or': new = 'get'
+				case 'del': new = 'drop'
+				case '==': new = 'equal'
+				case '<': new = 'less'
+				case '>':
+					new = 'greater'
+					lst[1], lst[2] = lst[2], lst[1]
+				case '!': new = 'not'
+				case ',': new = 'unescape' # after lisp
+				case _:
+					if base.startswith('set'):
+						op = _assign_ops.get(base[3:])
+						if op is not None:
+							new = 'store'
+							lst[2] = CallListNode([StringNode(op), CallListNode([StringNode('load'), lst[1]]), lst[2]])
+					else:
+						op = _assign_ops.get(base)
+						if op is not None:
+							new = op
+
+			lst[0] = StringNode(new)
+			return lst
+
+	return _Aliases
