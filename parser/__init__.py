@@ -2,7 +2,6 @@ import re
 from typing import Iterator, Callable
 from enum import Enum
 from dataclasses import dataclass
-from collections import UserList
 
 class TokenKind(Enum):
 	EOF = 0
@@ -44,7 +43,7 @@ class QuotedNode():
 			return f'[unescape/{self.value.emit()}]'
 		raise ValueError
 
-class ListNode(UserList):
+class ListNode(list):
 	OPEN: str
 	CLOSE: str
 
