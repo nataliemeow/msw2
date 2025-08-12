@@ -14,6 +14,8 @@ _assign_ops = {
 }
 
 def Aliases(base: type[Parser]):
+	'''Random aliases.'''
+
 	class _Aliases(base):
 		def _parse_list(self, *args):
 			lst = super()._parse_list(*args)
