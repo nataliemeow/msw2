@@ -1,6 +1,4 @@
 from parser import Parser, StringNode, CallListNode
-from typing import cast
-import os.path
 
 # TODO: modularize this further?
 
@@ -17,13 +15,6 @@ _assign_ops = {
 
 def Aliases(base: type[Parser]):
 	class _Aliases(base):
-		path: str | None
-
-		def __init__(self, *args, path=None, **kwargs):
-			super().__init__(*args, **kwargs)
-			self.path = os.path.abspath('.') if path is None else path
-			self.parent = None
-
 		def _parse_list(self, *args):
 			lst = super()._parse_list(*args)
 
