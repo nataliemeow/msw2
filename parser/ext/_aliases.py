@@ -19,6 +19,7 @@ def Aliases(base: type[Parser]):
 	class _Aliases(base):
 		def _parse_list(self, *args):
 			lst = super()._parse_list(*args)
+			if len(lst) == 0: return lst
 
 			base = lst[0]
 			if not isinstance(base, StringNode): return lst
