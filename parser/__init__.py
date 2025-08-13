@@ -1,4 +1,5 @@
 import re
+import base64
 from typing import Iterator, Callable
 from enum import Enum
 from dataclasses import dataclass
