@@ -12,7 +12,7 @@ def Include(base: type[Parser]):
 
 		def __init__(self, *args, path=None, **kwargs):
 			super().__init__(*args, **kwargs)
-			self.path = os.path.abspath('.') if path is None else path
+			self.dir_path = os.path.abspath('.' if path is None else os.path.dirname(path))
 			self.parent = None
 
 		def _parse_list(self, *args):
@@ -22,12 +22,8 @@ def Include(base: type[Parser]):
 			if lst[0] != '#include': return lst
 
 			include_rel_path = cast(StringNode, lst[1])
-			include_abs_path = os.path.join(
-				'.' if self.path is None else os.path.dirname(self.path),
-				include_rel_path
-			)
-			with open(include_abs_path) as f:
+			with open(os.path.join(self.dir_path, include_rel_path)) as f:
 				parser = self.__class__(f.read())
-				parser.path = include_abs_path
+				parser.dir_path = self.dir_path
 
 	return _Include
