@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MSW</title>
+    <style>
+      html, body, #app {
+        height: 100%;
+      }
+      body {
+        margin: 8px;
+      }
+      #app {
+        display: grid;
+        gap: 6px;
+        grid-template-areas:
+          'h h'
+          'i o';
+        grid-template-rows: min-content 1fr;
+      }
+      @media (max-width: 700px) {
+        #app {
+          grid-template-areas:
+            'h'
+            'i'
+            'o';
+          grid-template-rows: min-content 1fr 1fr;
+        }
+      }
+      #header {
+        grid-area: h;
+        display: flex;
+        align-items: center;
+      }
+      #input {
+        grid-area: i;
+      }
+      #output {
+        grid-area: o;
+      }
+      textarea, button, input {
+        font-size: inherit;
+      }
+      textarea {
+        font-family: Consolas, Menlo, monospace;
+        flex: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div id='app'>
+      <div id='header'>
+        <button id='compile-button'>Compile</button>
+      </div>
+      <textarea id='input'></textarea>
+      <textarea id='output' disabled></textarea>
+    </div>
+    <script src='https://cdn.jsdelivr.net/pyodide/v0.28.1/full/pyodide.js'></script>
+    <script>
+      async function compile() {
+        if (!e.ctrlKey || e.key !== 'Enter') return;
+
+        window.msw = {
+          exts: ['Aliases'],
+          src: srcInputE.value
+        };
+
+        await pyodide.runPythonAsync(`
+          exts = [getattr(parser.ext, ext_name) for ext_name in js.msw.exts]
+          js.msw.out = Parser.use(*exts)(js.msw.src).parse().emit()
+        `);
+        
+        outputE.value = window.msw.out;
+      }
+      async function main() {
+        const inputE = document.getElementById('input');
+        const outputE = document.getElementById('output');
+        const compileButtonE = document.getElementById('compile-button');
+
+        const pyodide = await loadPyodide();
+        const response = await fetch('msw.zip');
+        const buffer = await response.arrayBuffer();
+        await pyodide.unpackArchive(buffer, 'zip');
+        await pyodide.runPythonAsync(`
+          import js
+          import os
+          from parser import Parser
+          import parser.ext
+        `);
+
+        inputE.addEventListener('keydown', compile);
+        compileButtonE.addEventListener('click', compile);
+      }
+
+      main();
+    </script>
+  </body>
+</html>
