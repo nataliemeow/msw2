@@ -17,8 +17,9 @@ def Aliases(base: type[Parser]):
 	'''Random aliases.'''
 
 	class _Aliases(base):
-		def _parse_list(self, *args):
-			lst = super()._parse_list(*args)
+		def _parse_list(self, list_type):
+			lst = super()._parse_list(list_type)
+			if list_type != CallListNode: return lst
 			if len(lst) == 0: return lst
 
 			base = lst[0]
