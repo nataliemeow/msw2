@@ -18,7 +18,7 @@ def OutJson(base: type[Parser]):
 				assert len(defn) == 2
 				name, value = defn
 				assert isinstance(name, StringNode)
-				out[str(name)] = repr(value)
+				out[str(name)] = value.emit()
 			return StringNode(json.dumps(out))
 
 	return _OutJson
