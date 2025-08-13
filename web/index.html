@@ -56,10 +56,14 @@
     </div>
     <script src='https://cdn.jsdelivr.net/pyodide/v0.28.1/full/pyodide.js'></script>
     <script>
+      const inputE = document.getElementById('input');
+      const outputE = document.getElementById('output');
+      const compileButtonE = document.getElementById('compile-button');
+
       async function compile() {
         window.msw = {
           exts: ['Aliases'],
-          src: srcInputE.value
+          src: inputE.value
         };
 
         await pyodide.runPythonAsync(`
@@ -71,10 +75,6 @@
       }
 
       async function main() {
-        const inputE = document.getElementById('input');
-        const outputE = document.getElementById('output');
-        const compileButtonE = document.getElementById('compile-button');
-
         const pyodide = await loadPyodide();
         const response = await fetch('msw.zip');
         const buffer = await response.arrayBuffer();
