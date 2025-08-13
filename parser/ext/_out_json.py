@@ -15,6 +15,7 @@ def OutJson(base: type[Parser]):
 			out = {}
 			for defn in lst[1:]:
 				assert isinstance(defn, ConcatListNode)
+				assert len(defn) == 2
 				name, value = defn
 				assert isinstance(name, StringNode)
 				out[str(name)] = repr(value)

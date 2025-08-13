@@ -20,6 +20,8 @@ def Include(base: type[Parser]):
 			if list_type != CallListNode: return lst
 			if len(lst) == 0: return lst
 			if lst[0] != '#include': return lst
+			assert len(lst) == 2
+			assert isinstance(lst[1], StringNode)
 
 			include_rel_path = cast(StringNode, lst[1])
 			with open(os.path.join(self.dir_path, include_rel_path)) as f:
