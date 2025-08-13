@@ -57,8 +57,6 @@
     <script src='https://cdn.jsdelivr.net/pyodide/v0.28.1/full/pyodide.js'></script>
     <script>
       async function compile() {
-        if (!e.ctrlKey || e.key !== 'Enter') return;
-
         window.msw = {
           exts: ['Aliases'],
           src: srcInputE.value
@@ -71,6 +69,7 @@
         
         outputE.value = window.msw.out;
       }
+
       async function main() {
         const inputE = document.getElementById('input');
         const outputE = document.getElementById('output');
@@ -87,7 +86,9 @@
           import parser.ext
         `);
 
-        inputE.addEventListener('keydown', compile);
+        inputE.addEventListener('keydown', e => {
+          if (e.ctrlKey && e.key === 'Enter') compile();
+        });
         compileButtonE.addEventListener('click', compile);
       }
 
