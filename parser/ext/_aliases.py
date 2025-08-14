@@ -39,15 +39,9 @@ def Aliases(base: type[Parser]):
 				case '!': new = 'not'
 				case ',': new = 'unescape' # after lisp
 				case _:
-					if base.startswith('set'):
-						op = _assign_ops.get(base[3:])
-						if op is not None:
-							new = 'store'
-							lst[2] = CallListNode([StringNode(op), CallListNode([StringNode('load'), lst[1]]), lst[2]])
-					else:
-						op = _assign_ops.get(base)
-						if op is not None:
-							new = op
+					op = _assign_ops.get(base)
+					if op is not None:
+						new = op
 
 			lst[0] = StringNode(new)
 			return lst
