@@ -56,26 +56,27 @@
     </div>
     <script src='https://cdn.jsdelivr.net/pyodide/v0.28.1/full/pyodide.js'></script>
     <script>
-      const inputE = document.getElementById('input');
-      const outputE = document.getElementById('output');
-      const compileButtonE = document.getElementById('compile-button');
-
-      async function compile() {
-        window.msw = {
-          exts: ['Aliases'],
-          src: inputE.value
-        };
-
-        await pyodide.runPythonAsync(`
-          exts = [getattr(parser.ext, ext_name) for ext_name in js.msw.exts]
-          js.msw.out = Parser.use(*exts)(js.msw.src).parse().emit()
-        `);
-        
-        outputE.value = window.msw.out;
-      }
-
       async function main() {
         const pyodide = await loadPyodide();
+
+        const inputE = document.getElementById('input');
+        const outputE = document.getElementById('output');
+        const compileButtonE = document.getElementById('compile-button');
+
+        async function compile() {
+          window.msw = {
+            exts: ['Aliases'],
+            src: inputE.value
+          };
+
+          await pyodide.runPythonAsync(`
+            exts = [getattr(parser.ext, ext_name) for ext_name in js.msw.exts]
+            js.msw.out = Parser.use(*exts)(js.msw.src).parse().emit()
+          `);
+          
+          outputE.value = window.msw.out;
+        }
+
         const response = await fetch('msw.zip');
         const buffer = await response.arrayBuffer();
         await pyodide.unpackArchive(buffer, 'zip');
