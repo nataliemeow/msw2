@@ -22,4 +22,6 @@ The extension may modify the AST, log to the console, etc.; however, the regex t
 from ._include import Include
 from ._aliases import Aliases
 from ._out_json import OutJson
-__all__ = ['Include', 'Aliases', 'OutJson']
+from ._short_load import ShortLoad
+from ._hex_literals import HexLiterals
+__all__ = ['Include', 'Aliases', 'OutJson', 'ShortLoad', 'HexLiterals']
