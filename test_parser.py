@@ -1,5 +1,5 @@
 from parser import Parser
-from parser.ext import Include, Aliases, OutJson
+from parser.ext import Include, Aliases, OutJson, ShortLoad, HexLiterals
 import pytest
 from pytest import param
 import re
@@ -31,6 +31,18 @@ def ms_format(src: str):
     ''',
     id='aliases'
   ),
+  param(
+    [ShortLoad],
+    r'.x ..x .',
+    r'[load/x][load/.x][load/]',
+    id='short_load'
+  ),
+  param(
+    [HexLiterals],
+    r'0xff : -0xff',
+    r'255:-255',
+    id='hex_literals'
+  )
 ])
 def test_exts(exts, src, out):
   assert Parser.use(*exts)(src).parse().emit() == ms_format(out)
