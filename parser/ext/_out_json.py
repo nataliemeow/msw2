@@ -3,12 +3,11 @@ from typing import cast
 import json
 
 def OutJson(base: type[Parser]):
-	'''Convert `(#out_json [key value]...)` lists to `{"key": "value"...}` strings. Meant to facilitate importing into natta-ric.'''
+	'''Convert `#out_json [KEY VALUE]...` files to `{KEY: VALUE...}` JSON strings. Meant to facilitate importing into natta-ric.'''
 
 	class _OutJson(base):
-		def _parse_list(self, list_type):
-			lst = super()._parse_list(list_type)
-			if list_type != CallListNode: return lst
+		def parse(self):
+			lst = super().parse()
 			if len(lst) == 0: return lst
 			if lst[0] != '#out_json': return lst
 			
@@ -19,6 +18,6 @@ def OutJson(base: type[Parser]):
 				name, value = defn
 				assert isinstance(name, StringNode)
 				out[str(name)] = value.emit()
-			return StringNode(json.dumps(out))
+			return StringNode(json.dumps(out, indent=2))
 
 	return _OutJson

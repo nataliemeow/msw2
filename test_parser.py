@@ -38,6 +38,6 @@ def test_exts(exts, src, out):
 def test_json():
   assert json.loads(
     Parser.use(OutJson)(
-      r'(#out_json [a (b)] [c (d)])'
+      r'#out_json [a (b)] [c (d)]'
     ).parse().emit()
   ) == {'a': '[b]', 'c': '[d]'}
