@@ -9,24 +9,23 @@ def Include(base: type[Parser]):
 	'''Replace `(#include FILE)` with the contents of FILE.'''
 
 	class _Include(base):
-		path: str | None
+		_dir_path: str
 
 		def __init__(self, *args, path=None, **kwargs):
 			super().__init__(*args, **kwargs)
-			self.dir_path = os.path.abspath('.' if path is None else os.path.dirname(path))
-			self.parent = None
+			self._dir_path = os.path.abspath('.' if path is None else os.path.dirname(path))
 
 		def _load(self, rel_path: str):
 			parser = None
-			with open(os.path.join(self.dir_path, rel_path)) as f:
+			with open(os.path.join(self._dir_path, rel_path)) as f:
 				parser = self.__class__(f.read())
-			parser.dir_path = self.dir_path
+			parser._dir_path = self._dir_path
 			return parser.parse()
 		
 		def _modify_list(self, lst: ListNode):
 			new_lst = lst.__class__()
 
-			for i, item in enumerate(lst):
+			for item in lst:
 				if (
 					not isinstance(item, CallListNode) or
 					len(item) == 0 or
@@ -38,7 +37,7 @@ def Include(base: type[Parser]):
 				assert len(item) == 2
 				assert isinstance(item[1], StringNode)
 
-				for path in glob.iglob(item[1]):
+				for path in glob.iglob(item[1], root_dir=self._dir_path):
 					new_lst.extend(self._load(path))
 			
 			return new_lst
