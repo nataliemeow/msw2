@@ -2,6 +2,7 @@ from parser import ListNode, Parser, TokenKind, StringNode, CallListNode, Concat
 
 def Flags(base: type[Parser]):
 	class _Flags(base):
+		_flags_INHERIT: bool = True
 		_flags: set[str]
 
 		def __init__(self, *args, **kwargs):

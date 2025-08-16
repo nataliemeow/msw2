@@ -19,6 +19,11 @@ def Include(base: type[Parser]):
 			parser = None
 			with open(os.path.join(self._dir_path, rel_path)) as f:
 				parser = self.__class__(f.read())
+				# i am deeply sorry
+				for prop, value in self.__dict__.items():
+					if hasattr(parser, prop + '_INHERIT'):
+						setattr(parser, prop, value)
+
 			parser._dir_path = self._dir_path
 			return parser.parse()
 		
