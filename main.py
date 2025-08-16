@@ -4,7 +4,7 @@ import sys
 
 with open(sys.argv[1]) as f:
 	print(
-		Parser.use(Include, Aliases, ShortLoad, Flags, OutJson, HexLiterals)(
+		Parser.use(Flags, Include, Aliases, ShortLoad, OutJson, HexLiterals)(
 			# i did not want to have to do this but my silly ass mixin thing necessitates it i think
 			f.read(), path=sys.argv[1] # type: ignore
 		).parse().emit()

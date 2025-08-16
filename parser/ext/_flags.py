@@ -5,7 +5,7 @@ def Flags(base: type[Parser]):
 		_flags: set[str]
 
 		def __init__(self, *args, **kwargs):
-			super().__init__(*args)
+			super().__init__(*args, **kwargs)
 			self._flags = set()
 
 		def parse(self):
@@ -24,7 +24,7 @@ def Flags(base: type[Parser]):
 				assert len(item) == 2
 				assert isinstance(item[1], StringNode)
 				
-				self._flags.add(item[1])
+				self._flags.add(str(item[1]))
 
 			return result
 		
