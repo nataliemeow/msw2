@@ -24,4 +24,5 @@ from ._aliases import Aliases
 from ._out_json import OutJson
 from ._short_load import ShortLoad
 from ._hex_literals import HexLiterals
-__all__ = ['Include', 'Aliases', 'OutJson', 'ShortLoad', 'HexLiterals']
+from ._flags import Flags
+__all__ = ['Include', 'Aliases', 'OutJson', 'ShortLoad', 'HexLiterals', 'Flags']
