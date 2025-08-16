@@ -4,7 +4,7 @@ def Flags(base: type[Parser]):
 	class _Flags(base):
 		_flags: set[str]
 
-		def __init__(self, *args):
+		def __init__(self, *args, **kwargs):
 			super().__init__(*args)
 			self._flags = set()
 
