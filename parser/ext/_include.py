@@ -1,5 +1,6 @@
 from parser import Parser, StringNode, CallListNode, ListNode
 from typing import cast
+import glob
 import os.path
 
 # TODO: detect circular includes, add limit
@@ -36,7 +37,9 @@ def Include(base: type[Parser]):
 
 				assert len(item) == 2
 				assert isinstance(item[1], StringNode)
-				new_lst.extend(self._load(item[1]))
+
+				for path in glob.iglob(item[1]):
+					new_lst.extend(self._load(path))
 			
 			return new_lst
 		
