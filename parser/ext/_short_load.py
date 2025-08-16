@@ -10,6 +10,7 @@ def ShortLoad(base: type[Parser]):
       node = super()._parse_node()
       if not isinstance(node, StringNode): return node
       if not node.startswith('.'): return node
+      if len(node) == 1: return node
       
       return CallListNode([StringNode('load'), StringNode(node[1:])])
 
