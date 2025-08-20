@@ -35,6 +35,9 @@ def _b64_encode(src: str):
 	elif trail == 2: src += '[/ ]'
 	return base64.b64encode(bytes(src, 'utf-8')).decode('utf-8')
 
+def _escape(src: str):
+	return _escape_re.sub(r'\\\g<0>', src)
+
 @dataclass
 class QuotedNode():
 	quote: str
@@ -45,9 +48,9 @@ class QuotedNode():
 	
 	def emit(self):
 		if self.quote == '\'':
-			return _b64_encode(self.value.emit())
+			return _escape(self.value.emit())
 		elif self.quote == ',':
-			return f'[base64.decode/{self.value.emit()}]'
+			return f'[unescape/{self.value.emit()}]'
 		raise ValueError
 
 class ListNode(list):
@@ -91,6 +94,7 @@ _token_re = re.compile(
 )
 _verbatim_re = re.compile(r'\\(["\n\\])')
 _symbol_re = re.compile(r'[\s()\[\]\',"@]')
+_escape_re = re.compile(r'[\[\]\\/]')
 
 def _tokenize(s: str) -> Iterator[Token]:
 	pos = 0
